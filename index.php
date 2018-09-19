@@ -27,8 +27,12 @@
     echo json_encode(array('success' => false));
   }
 
-  $to = $_GET['email'];
   $subject = '😉';
+  if (isset($_GET['subject']) && $_GET['subject'] != '') {
+    $subject = $_GET['subject']
+  }
+
+  $to = $_GET['email'];
   $headers = "Content-Type: text/html; charset=utf-8\r\n";
   $succes = mail($to, $subject, $body, $headers);
 

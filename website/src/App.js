@@ -3,18 +3,19 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 const EMAIL_REGEX = /(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/;
-const API_URL = 'http://fromios.alwaysdata.net/';
+const API_URL = 'https://www.nicolasbellot.fr/projets/lab/osx/api/';
 
 const styles = {
   wrapper: {
     width: '100%',
-    height: '50%',
+    height: '75%',
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
     flexDirection: 'column',
   },
   h1: {
+    textAlign: 'center',
     display: 'flex',
     alignItems: 'center',
     fontFamily: 'Dosis',
@@ -32,7 +33,7 @@ const styles = {
     padding: '10px',
   },
   label: {
-    marginBottom: '40px',
+    marginBottom: '10px',
     fontFamily: 'Dosis',
     fontSize: '30px',
     fontWeight: 200,
@@ -40,9 +41,11 @@ const styles = {
     color: '#4a4848',
   },
   inputWrapper: {
+    height: '330px',
     display: 'flex',
     alignItems: 'center',
     flexDirection: 'column',
+    justifyContent: 'space-between',
   },
   button: {
     cursor: 'pointer',
@@ -59,6 +62,7 @@ const styles = {
 class App extends React.Component {
   state = {
     targetEmail: '',
+    emailSubject: '',
     isFetching: false,
   }
 
@@ -73,9 +77,14 @@ class App extends React.Component {
     return !this.isValidEmail() ? '#da7676' : '#72bd72';
   }
 
-  onChange = (e) => {
+  onChangeEmail = (e) => {
     const targetEmail = e.target.value;
     this.setState({ targetEmail });
+  }
+
+  onChangeSubject = (e) => {
+    const emailSubject = e.target.value;
+    this.setState({ emailSubject });
   }
 
   onServerRespond = (res) => {
@@ -100,20 +109,19 @@ class App extends React.Component {
       return;
     }
 
-    const { targetEmail } = this.state;
+    const { targetEmail, emailSubject } = this.state;
 
     this.setState({ isFetching: true });
 
-    fetch(`${API_URL}?email=${targetEmail}`, { mode: 'no-cors' })
+    fetch(`${API_URL}?email=${targetEmail}&subject=${emailSubject}`)
       .then(res => res.json())
       .then(() => this.onServerRespond({ success: true }))
       .catch(() => this.onServerRespond({ success: false }))
   }
 
   render() {
-    const { targetEmail, isFetching } = this.state;
+    const { targetEmail, emailSubject, isFetching } = this.state;
 
-    console.log(this.state.targetEmail)
     return (
       <React.Fragment>
         <ToastContainer />
@@ -127,36 +135,48 @@ class App extends React.Component {
             />
           </h1>
           <form onSubmit={this.onSubmit} style={styles.inputWrapper}>
-            <p style={styles.label}>Enter your friend email :</p>
-            <div style={{ display: 'flex', alignItems: 'center' }}>
+            <div>
+              <p style={styles.label}>Enter an email Subject :</p>
               <input
-                style={{
-                  ...styles.input,
-                  borderBottom: `solid 1px ${this.inputColor}`,
-                  color: `${this.inputColor}`,
-                }}
-                type="email"
-                placeholder="friend@gmail.com"
-                onChange={this.onChange}
-                value={targetEmail}
+                style={styles.input}
+                type="text"
+                placeholder="eg. URGENCY !!!"
+                onChange={this.onChangeSubject}
+                value={emailSubject}
               />
-              <button
-                onClick={this.onSubmit}
-                style={{
-                  ...styles.button,
-                  background: !isFetching
-                    ? this.inputColor
-                    : 'none'
-                }}
-              >
-                {isFetching
-                  ? <img
-                      src="https://loading.io/spinners/coolors/index.palette-rotating-ring-loader.gif"
-                      style={{ width: '100%', height: '100%' }}
-                    />
-                  : 'SEND'
-                }
-              </button>
+            </div>
+            <div>
+              <p style={styles.label}>Enter your friend email :</p>
+              <div style={{ display: 'flex', alignItems: 'center' }}>
+                <input
+                  style={{
+                    ...styles.input,
+                    borderBottom: `solid 1px ${this.inputColor}`,
+                    color: `${this.inputColor}`,
+                  }}
+                  type="email"
+                  placeholder="eg. friend@gmail.com"
+                  onChange={this.onChangeEmail}
+                  value={targetEmail}
+                />
+                <button
+                  onClick={this.onSubmit}
+                  style={{
+                    ...styles.button,
+                    background: !isFetching
+                      ? this.inputColor
+                      : 'none'
+                  }}
+                >
+                  {isFetching
+                    ? <img
+                        src="https://loading.io/spinners/coolors/index.palette-rotating-ring-loader.gif"
+                        style={{ width: '100%', height: '100%' }}
+                      />
+                    : 'SEND'
+                  }
+                </button>
+              </div>
             </div>
           </form>
         </div>
