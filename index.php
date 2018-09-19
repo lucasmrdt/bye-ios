@@ -25,6 +25,7 @@
   
   if (!isset($_GET['email'])) {
     echo json_encode(array('success' => false));
+    return;
   }
 
   $subject = '😉';
@@ -39,5 +40,7 @@
   if (!$success) {
     echo json_encode(array('success' => false));
   }
-  echo json_encode(array('success' => true));
+  else {
+    echo json_encode(array('success' => true));
+  }
 ?>
