@@ -22,8 +22,9 @@
 
   $body = ob_get_clean();
 
+  
   if (!isset($_GET['email'])) {
-    echo "error";
+    echo json_encode(array('success' => false));
   }
 
   $to = $_GET['email'];
@@ -32,7 +33,7 @@
   $succes = mail($to, $subject, $body, $headers);
 
   if (!$success) {
-    echo "error"
+    echo json_encode(array('success' => false));
   }
-  echo "success";
+  echo json_encode(array('success' => true));
 ?>

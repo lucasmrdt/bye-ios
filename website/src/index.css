@@ -8,4 +8,10 @@ html, body, #root {
     height: 100%;
 }
 
+#root {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 textarea, select, input, button { outline: none; }
