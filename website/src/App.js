@@ -10,7 +10,7 @@ const styles = {
     width: '100%',
     height: '75%',
     display: 'flex',
-    justifyContent: 'space-between',
+    justifyContent: 'space-around',
     alignItems: 'center',
     flexDirection: 'column',
   },
@@ -41,7 +41,7 @@ const styles = {
     color: '#4a4848',
   },
   inputWrapper: {
-    height: '330px',
+    height: '60%',
     display: 'flex',
     alignItems: 'center',
     flexDirection: 'column',
@@ -90,15 +90,21 @@ class App extends React.Component {
   onServerRespond = (res) => {
     const toastOptions = {
       autoClose: 5000,
-      position: toast.POSITION.BOTTOM_CENTER,
+      position: toast.POSITION.TOP_CENTER,
     };
 
     this.setState({ isFetching: false });
     if (res.success) {
-      toast('You have turned off your friend\'s ios device ! GG !');
+      toast(
+        'You have turned off your friend\'s ios device ! GG !',
+        toastOptions,
+      );
     }
     else {
-      toast('Oups ! We have problem verify your friend\'s email !');
+      toast(
+        'Oups ! We have problem verify your friend\'s email !',
+        toastOptions,
+      );
     }
   }
 
@@ -115,7 +121,7 @@ class App extends React.Component {
 
     fetch(`${API_URL}?email=${targetEmail}&subject=${emailSubject}`)
       .then(res => res.json())
-      .then(() => this.onServerRespond({ success: true }))
+      .then((res) => this.onServerRespond(res))
       .catch(() => this.onServerRespond({ success: false }))
   }
 
