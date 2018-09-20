@@ -1,0 +1,12 @@
+{
+    "name": "marand_l/aie-ios",
+    "description": "Say bye to your ios friends.",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Lucas Marandat",
+            "email": "lucas.marandat@epitech.eu"
+        }
+    ],
+    "require": {}
+}
