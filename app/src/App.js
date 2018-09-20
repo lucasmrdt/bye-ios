@@ -197,6 +197,7 @@ class App extends React.Component {
                   placeholder="eg. friend@gmail.com"
                   onChange={this.onChangeField('toEmail')}
                   value={toEmail}
+                  autoFocus
                 />
                 <button
                   onClick={this.onSubmit}
