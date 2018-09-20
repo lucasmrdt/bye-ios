@@ -1,1 +1,1 @@
-web: npm i --prefix website/ && npm run build --prefix website/ && npm start
+web: npm run build --prefix app && vendor/bin/heroku-php-apache2 web/
