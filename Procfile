@@ -1,1 +1,1 @@
-web: npm i --prefix website/ && npm run build --prefix website/
+web: npm i --prefix website/ && npm run build --prefix website/ && npm start
