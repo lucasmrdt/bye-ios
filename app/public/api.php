@@ -24,6 +24,7 @@
 
   
   if (!isset($_GET['email'])) {
+    echo "no email";
     echo json_encode(array('success' => false));
     exit;
   }
@@ -37,10 +38,6 @@
   $headers = "Content-Type: text/html; charset=utf-8\r\n";
   $succes = mail($to, $subject, $body, $headers);
 
-  if (!$success) {
-    echo json_encode(array('success' => false));
-  }
-  else {
-    echo json_encode(array('success' => true));
-  }
+  echo json_encode(array('success' => !!$success));
+  echo $success;
 ?>
