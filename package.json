@@ -1,0 +1,31 @@
+{
+  "name": "aie-ios",
+  "version": "1.0.0",
+  "description": "",
+  "main": "serveur.js",
+  "scripts": {
+    "dev": "nodemon serveur.js",
+    "start": "node serveur.js",
+    "build": "npm run build --prefix app",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lucasmrdt/bye-ios.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/lucasmrdt/bye-ios/issues"
+  },
+  "homepage": "https://github.com/lucasmrdt/bye-ios#readme",
+  "dependencies": {
+    "@sendgrid/mail": "^6.3.1",
+    "express": "^4.16.3",
+    "path": "^0.12.7"
+  },
+  "devDependencies": {
+    "nodemon": "^1.18.4"
+  }
+}

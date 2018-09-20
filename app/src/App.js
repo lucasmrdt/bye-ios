@@ -3,7 +3,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 const EMAIL_REGEX = /(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/;
-const API_URL = '/api.php';
+const API_URL = '/api';
 
 const styles = {
   wrapper: {
@@ -28,24 +28,32 @@ const styles = {
   input: {
     border: 'none',
     borderBottom: '1px solid black',
-    fontSize: '20px',
+    fontSize: '15px',
+    borderRadius: 0,
     textAlign: 'center',
     padding: '10px',
   },
   label: {
     marginBottom: '10px',
     fontFamily: 'Dosis',
-    fontSize: '30px',
+    fontSize: '25px',
     fontWeight: 200,
-    marginRight: '20px',
     color: '#4a4848',
+    textAlign: 'center',
   },
   inputWrapper: {
+    display: 'flex',
+    alignItems: 'center',
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+  },
+  formWrapper: {
     height: '60%',
     display: 'flex',
     alignItems: 'center',
     flexDirection: 'column',
     justifyContent: 'space-between',
+    minHeight: '360px',
   },
   button: {
     cursor: 'pointer',
@@ -61,13 +69,15 @@ const styles = {
 
 class App extends React.Component {
   state = {
-    targetEmail: '',
-    emailSubject: '',
+    toEmail: '',
+    fromEmail: '',
+    subjectEmail: '',
     isFetching: false,
   }
 
   isValidEmail = () => {
-    if (this.state.targetEmail.match(EMAIL_REGEX)) {
+    const { toEmail } = this.state;
+    if (toEmail.match(EMAIL_REGEX)) {
       return true;
     }
     return false;
@@ -77,14 +87,10 @@ class App extends React.Component {
     return !this.isValidEmail() ? '#da7676' : '#72bd72';
   }
 
-  onChangeEmail = (e) => {
-    const targetEmail = e.target.value;
-    this.setState({ targetEmail });
-  }
-
-  onChangeSubject = (e) => {
-    const emailSubject = e.target.value;
-    this.setState({ emailSubject });
+  onChangeField = (field) => {
+    return (e) => {
+      this.setState({ [field]: e.target.value });
+    }
   }
 
   onServerRespond = (res) => {
@@ -93,7 +99,6 @@ class App extends React.Component {
       position: toast.POSITION.TOP_CENTER,
     };
 
-    console.log(res);
     this.setState({ isFetching: false });
     if (res.success) {
       toast(
@@ -111,23 +116,31 @@ class App extends React.Component {
 
   onSubmit = (e) => {
     e.preventDefault();
-
     if (!this.isValidEmail()) {
       return;
     }
 
-    const { targetEmail, emailSubject } = this.state;
+    const {
+      toEmail,
+      fromEmail,
+      subjectEmail,
+    } = this.state;
 
     this.setState({ isFetching: true });
 
-    fetch(`${API_URL}?email=${targetEmail}&subject=${emailSubject}`)
+    fetch(`${API_URL}?to=${toEmail}&subject=${subjectEmail}&from=${fromEmail}`)
       .then(res => res.json())
       .then((res) => this.onServerRespond(res))
-      .catch((e) => console.log(e) && this.onServerRespond({ success: false }))
+      .catch((e) => this.onServerRespond({ success: false }))
   }
 
   render() {
-    const { targetEmail, emailSubject, isFetching } = this.state;
+    const {
+      fromEmail,
+      toEmail,
+      subjectEmail,
+      isFetching,
+    } = this.state;
 
     return (
       <React.Fragment>
@@ -141,19 +154,32 @@ class App extends React.Component {
               style={styles.emoji}
             />
           </h1>
-          <form onSubmit={this.onSubmit} style={styles.inputWrapper}>
+          <form onSubmit={this.onSubmit} style={styles.formWrapper}>
+
             <div>
-              <p style={styles.label}>Enter an email Subject :</p>
+              <p style={styles.label}>Enter an "from" email :</p>
               <input
                 style={styles.input}
                 type="text"
-                placeholder="eg. URGENCY !!!"
-                onChange={this.onChangeSubject}
-                value={emailSubject}
+                placeholder="eg. support@gmail.com"
+                onChange={this.onChangeField('fromEmail')}
+                value={fromEmail}
               />
             </div>
+
             <div>
-              <p style={styles.label}>Enter your friend email :</p>
+              <p style={styles.label}>Enter an subject :</p>
+              <input
+                style={styles.input}
+                type="text"
+                placeholder="eg. Warning!"
+                onChange={this.onChangeField('subjectEmail')}
+                value={subjectEmail}
+              />
+            </div>
+
+            <div>
+              <p style={styles.label}>Enter your target email :</p>
               <div style={{ display: 'flex', alignItems: 'center' }}>
                 <input
                   style={{
@@ -163,8 +189,8 @@ class App extends React.Component {
                   }}
                   type="email"
                   placeholder="eg. friend@gmail.com"
-                  onChange={this.onChangeEmail}
-                  value={targetEmail}
+                  onChange={this.onChangeField('toEmail')}
+                  value={toEmail}
                 />
                 <button
                   onClick={this.onSubmit}
@@ -184,6 +210,7 @@ class App extends React.Component {
                   }
                 </button>
               </div>
+
             </div>
           </form>
         </div>

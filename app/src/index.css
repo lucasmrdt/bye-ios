@@ -10,10 +10,13 @@ html, body, #root {
 }
 
 #root {
+    min-height: 630px;
     padding: 0 20px;
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
-textarea, select, input, button { outline: none; }
+textarea, select, input, button {
+    outline: none;
+}
