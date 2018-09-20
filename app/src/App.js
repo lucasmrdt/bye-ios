@@ -93,6 +93,7 @@ class App extends React.Component {
       position: toast.POSITION.TOP_CENTER,
     };
 
+    console.log(res);
     this.setState({ isFetching: false });
     if (res.success) {
       toast(
@@ -122,7 +123,7 @@ class App extends React.Component {
     fetch(`${API_URL}?email=${targetEmail}&subject=${emailSubject}`)
       .then(res => res.json())
       .then((res) => this.onServerRespond(res))
-      .catch(() => this.onServerRespond({ success: false }))
+      .catch((e) => console.log(e) && this.onServerRespond({ success: false }))
   }
 
   render() {
