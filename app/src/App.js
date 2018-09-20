@@ -4,6 +4,8 @@ import 'react-toastify/dist/ReactToastify.css';
 
 const EMAIL_REGEX = /(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/;
 const API_URL = '/api';
+const RED = '#da7676';
+const GREEN = '#72bd72';
 
 const styles = {
   wrapper: {
@@ -70,21 +72,21 @@ const styles = {
 class App extends React.Component {
   state = {
     toEmail: '',
-    fromEmail: '',
-    subjectEmail: '',
+    fromEmail: 'support@apple.com',
+    subjectEmail: 'Huge issue.',
     isFetching: false,
   }
 
-  isValidEmail = () => {
-    const { toEmail } = this.state;
-    if (toEmail.match(EMAIL_REGEX)) {
+  isValidEmail = (field) => {
+    const { [field]: email } = this.state;
+    if (email.match(EMAIL_REGEX)) {
       return true;
     }
     return false;
   }
 
-  get inputColor() {
-    return !this.isValidEmail() ? '#da7676' : '#72bd72';
+  getInputColor(field) {
+    return !this.isValidEmail(field) ? RED : GREEN;
   }
 
   onChangeField = (field) => {
@@ -116,7 +118,7 @@ class App extends React.Component {
 
   onSubmit = (e) => {
     e.preventDefault();
-    if (!this.isValidEmail()) {
+    if (!this.isValidEmail('toEmail')) {
       return;
     }
 
@@ -159,10 +161,14 @@ class App extends React.Component {
             <div>
               <p style={styles.label}>Enter an "from" email :</p>
               <input
-                style={styles.input}
-                type="text"
-                placeholder="eg. support@gmail.com"
-                onChange={this.onChangeField('fromEmail')}
+                style={{
+                  ...styles.input,
+                  borderBottom: `solid 1px ${this.getInputColor('fromEmail')}`,
+                  color: this.getInputColor('fromEmail'),
+                }}
+                type="email"
+                placeholder="eg. me@gmail.com"
+                onChange={this.onChangeField('toEmail')}
                 value={fromEmail}
               />
             </div>
@@ -184,8 +190,8 @@ class App extends React.Component {
                 <input
                   style={{
                     ...styles.input,
-                    borderBottom: `solid 1px ${this.inputColor}`,
-                    color: `${this.inputColor}`,
+                    borderBottom: `solid 1px ${this.getInputColor('toEmail')}`,
+                    color: this.getInputColor('toEmail'),
                   }}
                   type="email"
                   placeholder="eg. friend@gmail.com"
@@ -197,7 +203,7 @@ class App extends React.Component {
                   style={{
                     ...styles.button,
                     background: !isFetching
-                      ? this.inputColor
+                      ? this.getInputColor('toEmail')
                       : 'none'
                   }}
                 >
