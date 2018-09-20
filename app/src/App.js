@@ -168,7 +168,7 @@ class App extends React.Component {
                 }}
                 type="email"
                 placeholder="eg. me@gmail.com"
-                onChange={this.onChangeField('toEmail')}
+                onChange={this.onChangeField('fromEmail')}
                 value={fromEmail}
               />
             </div>
