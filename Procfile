@@ -1,0 +1,1 @@
+web: npm i --prefix website/ && npm run build --prefix website/
