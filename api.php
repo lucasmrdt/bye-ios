@@ -25,12 +25,12 @@
   
   if (!isset($_GET['email'])) {
     echo json_encode(array('success' => false));
-    return;
+    exit;
   }
 
   $subject = '😉';
   if (isset($_GET['subject']) && $_GET['subject'] != '') {
-    $subject = $_GET['subject']
+    $subject = $_GET['subject'];
   }
 
   $to = $_GET['email'];
