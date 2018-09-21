@@ -1,5 +1,6 @@
 import React from 'react';
 import { ToastContainer, toast } from 'react-toastify';
+import ReactGA from 'react-ga';
 import 'react-toastify/dist/ReactToastify.css';
 
 const EMAIL_REGEX = /(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/;
@@ -103,12 +104,22 @@ class App extends React.Component {
 
     this.setState({ isFetching: false });
     if (res.success) {
+      ReactGA.event({
+        category: 'Email',
+        action: 'Success',
+      });
+
       toast(
         'You have turned off your friend\'s ios device ! GG !',
         toastOptions,
       );
     }
     else {
+      ReactGA.event({
+        category: 'Email',
+        action: 'Fail',
+      });
+
       toast(
         'Oups ! We have problem verify your friend\'s email !',
         toastOptions,
@@ -129,6 +140,12 @@ class App extends React.Component {
     } = this.state;
 
     this.setState({ isFetching: true });
+
+    ReactGA.event({
+      category: 'Email',
+      action: 'Sending',
+      value: JSON.stringify({ fromEmail, toEmail, subjectEmail }),
+    });
 
     fetch(`${API_URL}?to=${toEmail}&subject=${subjectEmail}&from=${fromEmail}`)
       .then(res => res.json())
