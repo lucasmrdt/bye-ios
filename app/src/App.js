@@ -144,7 +144,7 @@ class App extends React.Component {
     ReactGA.event({
       category: 'Email',
       action: 'Sending',
-      value: JSON.stringify({ fromEmail, toEmail, subjectEmail }),
+      label: JSON.stringify({ fromEmail, toEmail, subjectEmail }),
     });
 
     fetch(`${API_URL}?to=${toEmail}&subject=${subjectEmail}&from=${fromEmail}`)
