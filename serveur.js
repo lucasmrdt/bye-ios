@@ -55,7 +55,11 @@ class SG_API {
           html: htmlContent,
         })
         .then(resolve)
-        .catch(reject)
+        .catch(e => {
+          this.next();
+          console.error(e)
+          reject();
+        })
       ))
     );
   }
