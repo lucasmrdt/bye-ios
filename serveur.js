@@ -45,6 +45,8 @@ class SG_API {
       : subject
     );
 
+    console.log(`[DEBUG] "${from}"[${subject}] ->  "${to}".`);
+
     const { htmlContent } = this.state;
     return (
       new Promise((resolve, reject) => (

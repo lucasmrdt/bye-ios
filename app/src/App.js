@@ -106,7 +106,7 @@ class App extends React.Component {
     if (res.success) {
       ReactGA.event({
         category: 'Email',
-        action: 'Success',
+        action: 'Success to send',
       });
 
       toast(
@@ -117,7 +117,7 @@ class App extends React.Component {
     else {
       ReactGA.event({
         category: 'Email',
-        action: 'Fail',
+        action: 'Fail to send',
       });
 
       toast(
@@ -140,11 +140,6 @@ class App extends React.Component {
     } = this.state;
 
     this.setState({ isFetching: true });
-
-    ReactGA.event({
-      category: 'Email',
-      action: `Sending -> ${toEmail}`,
-    });
 
     fetch(`${API_URL}?to=${toEmail}&subject=${subjectEmail}&from=${fromEmail}`)
       .then(res => res.json())
